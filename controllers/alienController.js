@@ -28,11 +28,11 @@ router.get("/base", (req, res) => {
     ]
     
     // Delete all extra aliens
-    Alien.deleteMany({}).then((data) => {
-        // Base Starter Aliens
+    Alien.deleteMany({})
+        .then(() => {
+        // Seed Starter Aliens
         Alien.create(startAliens)
-        .then((data) => {
-            // send created aliens as response to confirm creation
+        .then(data => {
             res.json(data)
         })
     })
@@ -43,6 +43,7 @@ router.get("/base", (req, res) => {
 router.get("/", (req, res) => {
     // in our index route, we want to use mongoose model methods to get our data
     Alien.find({})
+        .populate
         .then(aliens => {
             // this is fine for initial testing
             // res.send(aliens)
@@ -56,6 +57,7 @@ router.get("/", (req, res) => {
 // read route -> finds and displays a single resource
 router.get("/:id", (req, res) => {
     const id = req.params.id
+
     Alien.findById(id)
         .then(alien => {
             console.log('the alien from the search',alien)
@@ -68,31 +70,52 @@ router.get("/:id", (req, res) => {
 // POST request
 // create route -> gives the ability to create new aliens
 router.post("/", (req, res) => {
-    // here, we'll get something called a requet body
+    // here, we'll get something called a request body
     // inside this function, that will be referred to as req.body
+    // this is going to add ownership, via a foreign key reference, to our fruits
+    // bascially, all we have to do, is append our request body, with the 'owner' field, and set the value tothe logged in user's id
+    req.body.owner = req.session.userId
     // we'll use the mongoose model method `create` to make a new alien
     Alien.create(req.body)
         .then(alien => {
             // send the user a '201 created' response, along with the new alien 
-            res.status(201).json({alien: alien.toObject() })
+            res.status(201).json({ alien: alien.toObject() })
         })
         .catch(error => console.log(error))
 })
+
+// we're going to build another route, that is owner specific, to list all the aliens owned by a certain (logged in) user
+router.get('/mine', (req, res) => {
+    // find the aliens by ownership
+    Alien.find({ owner: req.session.userId })
+    // then display the aliens
+        .then(aliens => {
+            res.status(200).json({ aliens: aliens })
+        })
+    // or throw and error if there is one
+        .catch(error => res.json(error))
+
+})
+
 
 // PUT request
 // update route -> updates a specific alien
 router.put("/:id", (req, res) => {
     // console.log("I hit the update route", req.params)
-    const id = req.params.id
-    
+    const alienId = req.params.id
     // for now we'll use a simple mongoose model method, eventually we'll update this (and all) routes and we'll use a different method
     // we're using findByIdAndUpdate, which needs three arguments
     // it needs an id, it needs the req.body, and whether the info is new
-    Alien.findByIdAndUpdate(id, req.body, {new: true})
+    Alien.findById(alienId)
         .then(alien => {
-            console.log('the alien from update',alien)
+            if (alien.owner == req.session.userId) {
+                return fruit.updateOne(req.body)
+            }
+        })
+        .then(alien => {
+            console.log('the updated alien',alien)
             // update success is called '204 - no content'
-            res.sendStatus(204)
+            res.sendStatus(401)
         })
         .catch(err => console.log(err))
 })
@@ -103,10 +126,16 @@ router.delete("/:id", (req, res) => {
     // grab the id from the request
     const id = req.params.id
     // find and delete the alien
-    Alien.findByIdAndRemove(id)
+    Alien.findById(id)
     // send a 204 if successful
-        .then(() => {
-            res.sendStatus(204)
+        .then(alien => {
+            if (alien.owner == req.session.userId) {
+                // if successful, send a status and delete the fruit
+                res.sendStatus(204)
+                return alien.deleteOne()
+            } else {
+                res.sendStatus(401)
+            }
         })
         // send the error if not
         .catch(err => res.json(err))
