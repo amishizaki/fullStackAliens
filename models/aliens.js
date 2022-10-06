@@ -18,14 +18,14 @@ const alienSchema = new Schema({
     species: String,
     planet: String,
     friendly: Boolean,
-    discovered: Number
+    discovered: Number,
     owner: {
         // here we can refer to an objectId
         // by declaring that as the type
         type: Schema.Types.ObjectId,
         // this line, tells us to refer to the User model
         ref: 'User'
-    }
+    },
     comments: [commentSchema]
 }, { timestamps: true})
 
