@@ -23,7 +23,7 @@ db.on('open', () => {
         { species: "Gallifreyans", planet: "Gallifrey", friendly: true, discovered: 1963 }
     ]
     // Delete all extra aliens
-    Alien.deleteMany({})
+    Alien.deleteMany({ owner: null })
         .then(deletedAliens => {
             console.log('this is what .deleteMany returns', deletedAliens)
             
@@ -46,6 +46,3 @@ db.on('open', () => {
             db.close()
         })
 })
-
-
-
