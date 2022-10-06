@@ -59,10 +59,16 @@ router.get("/:id", (req, res) => {
     const id = req.params.id
 
     Alien.findById(id)
+        // populate will provide more data about the document that is in the specified collection
+        // the first arg is the field to populte
+        // the second can specify which parts to keep or which to remove
+        // .populate("owner", "username")
+        // we can also populate fields of our subdocuments
+        .populate('comments.author', 'username')
         .then(alien => {
-            console.log('the alien from the search',alien)
+            // console.log('the alien from the search',alien)
             // update success is called '204 - no content'
-            res.json({aliens: alien})
+            res.json({alien: alien})
         })
         .catch(err => console.log(err))
 })
