@@ -31,7 +31,7 @@ router.get("/", (req, res) => {
             // here, we're going to render a page, but we can also send data that we got from the database to that liquid page for rendering
             res.render('aliens/index', { aliens, username, loggedIn, userId })
         })
-        .catch(err => console.log(err))
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
 // GET for new alien
@@ -59,12 +59,16 @@ router.post("/", (req, res) => {
     console.log('the alien from the form', req.body)
     // we'll use the mongoose model method `create` to make a new alien
     Alien.create(req.body)
-        .then(alien => {
-            // send the user a '201 created' response, along with the new alien
-            // res.status(201).json({ alien: alien.toObject() })
-            res.redirect('/aliens')
+        .then(fruit => {
+            const username = req.session.username
+            const loggedIn = req.session.loggedIn
+            const userId = req.session.userId
+            // send the user a '201 created' response, along with the new fruit
+            // res.status(201).json({ fruit: fruit.toObject() })
+            res.redirect('/fruits')
+            // res.render('fruits/show', { fruit, username, loggedIn, userId })
         })
-        .catch(error => console.log(error))
+        .catch(err => res.redirect(`/error?error=${err}`))  
 })
 
 // GET request
@@ -83,15 +87,15 @@ router.get('/mine', (req, res) => {
             res.render('aliens/index', { aliens, username, loggedIn, userId })
         })
     // or throw an error if there is one
-        .catch(error => res.json(error))
+        .catch(error => res.redirect(`/error?error=${err}`))
 })
 
 // GET request to show the update page
 router.get("/edit/:id", (req, res) => {
-    // const username = req.session.username
-    // const loggedIn = req.session.loggedIn
-    // const userId = req.session.userId
-    res.send('edit page')
+    const username = req.session.username
+    const loggedIn = req.session.loggedIn
+    const userId = req.session.userId
+    // res.send('edit page')
 })
 
 // PUT request
