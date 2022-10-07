@@ -6,9 +6,9 @@ const express = require("express") // import express
 const morgan = require("morgan") // import morgan
 // const mongoose = require("mongoose") // import mongoose
 const path = require("path") // import path module
-const AlienRouter = require("./controllers/alienController")
-const UserRouter = require("./controllers/userController")
-const CommentRouter = require("./controllers/commentController")
+const AlienRouter = require("./controllers/alienControllers")
+const UserRouter = require("./controllers/userControllers")
+const CommentRouter = require("./controllers/commentControllers")
 const middleware = require("./utils/middleware")
 
 /////////////////////////////////////////////
