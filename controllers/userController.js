@@ -13,6 +13,14 @@ const router = express.Router()
 /////////////////////////////////////////
 // Routes
 /////////////////////////////////////////
+
+// GET route for sign up
+// renders the signup page
+router.get('/signup', (req, res) => {
+    res.render('users/signup')
+})
+
+// POST route for sign up
 // route for sign up
 router.post('/signup', async (req, res) => {
     // this route will receive a req.body
@@ -36,6 +44,11 @@ router.post('/signup', async (req, res) => {
             console.log(err)
             res.json(err)
         })
+})
+
+// renders the login page
+router.get('/login', (req, res) => {
+    res.render('users/login')
 })
 
 // a route for log in

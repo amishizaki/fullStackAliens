@@ -1,0 +1,9 @@
+body {
+    background-color: slategray;
+    color: white;
+}
+
+.card {
+    margin: 5px;
+    width: 18rem;
+}

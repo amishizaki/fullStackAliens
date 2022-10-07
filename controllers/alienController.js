@@ -90,6 +90,8 @@ router.post("/", (req, res) => {
         .catch(error => console.log(error))
 })
 
+// GET request
+// only fruits owned by logged in user
 // we're going to build another route, that is owner specific, to list all the aliens owned by a certain (logged in) user
 router.get('/mine', (req, res) => {
     // find the aliens by ownership
