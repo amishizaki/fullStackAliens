@@ -1,0 +1,46 @@
+{% layout 'layout.liquid' %}
+{% block content %}
+
+    <div class="container-sm">
+        <form action="/aliens" method="POST">
+            <fieldset>
+                <legend>Record your Discovered Alien</legend>
+                <label class="form-label">Name:</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="name"
+                    placeholder="enter the name of the Alien"
+                >
+                <label class="form-label">Planet:</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="planet"
+                    placeholder="what is the planet of origin"
+                >
+                <label class="form-label">Date Discovered:</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    name="discovered"
+                    placeholder="what is the planet of origin"
+                >
+                <label class="form-label">Are they friendly:</label>
+                <input
+                    class="form-check-input"
+                    type="checkbox"
+                    name="friendly"
+                >
+            </fieldset>
+            <input
+                class="btn btn-success"
+                type="submit"
+                value="Add New Species"
+            >
+        </form>
+    </div>
+
+
+
+{% endblock %}

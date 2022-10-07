@@ -43,12 +43,16 @@ router.get("/base", (req, res) => {
 router.get("/", (req, res) => {
     // in our index route, we want to use mongoose model methods to get our data
     Alien.find({})
-        .populate
+        .populate("comments.author", "username")
         .then(aliens => {
+            const username = req.session.username
+            const loggedIn = req.session.loggedIn
+            const userId = req.session.userId
             // this is fine for initial testing
             // res.send(aliens)
             // this the preferred method for APIs
-            res.json({ aliens: aliens })
+            // res.json({ aliens: aliens })
+            res.render('aliens/index', { aliens, username, loggedIn, userId })
         })
         .catch(err => console.log(err))
 })
@@ -78,7 +82,7 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
     // here, we'll get something called a request body
     // inside this function, that will be referred to as req.body
-    // this is going to add ownership, via a foreign key reference, to our fruits
+    // this is going to add ownership, via a foreign key reference, to our aliens
     // bascially, all we have to do, is append our request body, with the 'owner' field, and set the value tothe logged in user's id
     req.body.owner = req.session.userId
     // we'll use the mongoose model method `create` to make a new alien
@@ -91,7 +95,7 @@ router.post("/", (req, res) => {
 })
 
 // GET request
-// only fruits owned by logged in user
+// only aliens owned by logged in user
 // we're going to build another route, that is owner specific, to list all the aliens owned by a certain (logged in) user
 router.get('/mine', (req, res) => {
     // find the aliens by ownership
@@ -117,7 +121,7 @@ router.put("/:id", (req, res) => {
     Alien.findById(alienId)
         .then(alien => {
             if (alien.owner == req.session.userId) {
-                return fruit.updateOne(req.body)
+                return alien.updateOne(req.body)
             }
         })
         .then(alien => {
@@ -138,7 +142,7 @@ router.delete("/:id", (req, res) => {
     // send a 204 if successful
         .then(alien => {
             if (alien.owner == req.session.userId) {
-                // if successful, send a status and delete the fruit
+                // if successful, send a status and delete the alien
                 res.sendStatus(204)
                 return alien.deleteOne()
             } else {

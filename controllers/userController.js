@@ -15,13 +15,13 @@ const router = express.Router()
 /////////////////////////////////////////
 
 // GET route for sign up
-// renders the signup page
+// renders a page with a signup form
 router.get('/signup', (req, res) => {
     res.render('users/signup')
 })
 
 // POST route for sign up
-// route for sign up
+// talks to the database, gets data from the signup form, creates a new user if possible
 router.post('/signup', async (req, res) => {
     // this route will receive a req.body
     console.log('this is our initial req.body', req.body)
@@ -46,12 +46,14 @@ router.post('/signup', async (req, res) => {
         })
 })
 
-// renders the login page
+// GET route for logging in
+// renders a page with a signup form
 router.get('/login', (req, res) => {
     res.render('users/login')
 })
 
-// a route for log in
+// POST route for logging in
+// receives user credentials and creates a session
 router.post('/login', async (req, res) => {
     // get our data from the req body, saved as separate variables
     const { username, password } = req.body
@@ -91,6 +93,17 @@ router.post('/login', async (req, res) => {
         })
 })
 
+// GET
+// SENDS to the logout page
+router.get('/logout', (req, res) => {
+    const username = req.session.username
+    const loggedIn = req.session.loggedIn
+    const userId = req.session.userId
+
+    res.render('users/logout', { username, loggedIn, userId})
+})
+
+// DELETE -> runs the logout
 // a route for log out 
 router.delete('/logout', (req, res) => {
     // destroy the session(eventually we'll redirect)

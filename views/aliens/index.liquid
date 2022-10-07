@@ -1,0 +1,36 @@
+<!-- we're serving block content in layout.liquid -->
+<!-- so we need to inform all our blocks(files) -->
+{% layout 'layout.liquid'%}
+<!-- here we start our block content -->
+{% block content %}
+    <div >
+        <h2 class="display-6">All aliens</h2>
+        <div class="row">
+            <!-- this uses liquid tags to loop over the aliens! -->
+            {% for alien in aliens %}
+                <div class="card" style="width: 18rem;">
+                    <!-- card header -> name of alien -->
+                    <!-- card body -> ready to eat as title, color as text-->
+                    <h5 class="card-header">{{ alien.name }}</h5>
+                    <div class="card-body">
+                        <h6 class="card-title">
+                            {% if alien.friendly %}
+                                Friendly
+                            {% else %}
+                                Not Friendly
+                            {% endif %}
+                        </h5>
+                        <p class="card-text"> 
+                            The homeworld of this {{ alien.name }} is {{ alien.planet }}
+                        </p>
+                        <p class="card-text">
+                            The {{ alien.name }} was discovered in {{ alien.discovered }}
+                        <a href="/aliens/{{ alien.id }}" class="btn btn-info">
+                            View {{ alien.name }}
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
