@@ -1,39 +1,57 @@
 {% layout 'layout.liquid' %}
 {% block content %}
     <div class="container-md">
-        <!-- you can do fun things like inline style with properties of your rendered object -->
-        <!-- <article style="background-color:{{alien.color}}"> -->
         <article>
-            <h2>{{ alien.name }} </h2>
-            <h3>{% if alien.friendly %}
+            <h2>{{ alien.species }} </h2>
+            <h4>{% if alien.friendly %}
                     Friendly
                 {% else %}
                     Not Friendly
                 {%endif%}
-            </h3>
-            <h3>{{ alien.planet }}</h3>
-            <h4>{{ alien.discovered }}</h4>
+            </h4>
+            <h4>{{ alien.planet }}</h4>
+            <h5>{{ alien.discovered }}</h5>
             {% if alien.owner == userId  %}
                 <div class="btn-group">
-
-                    <a href="/aliens/edit{{ alien.id }}" class="btn btn-primary">Edit</a>
+                    <a class="btn btn-warning" href="/aliens/edit{{ alien.id }}">Edit</a>
                     <!-- this is how we tell our app to use method-override -->
                     <!-- forms can ONLY send GET or POST requests, so we need method-override to allow for PUT and DELETE requests -->
                     <form action="/aliens/{{ alien._id }}?_method=DELETE" method="POST">
-                        <input type="submit" value="delete that froot" class="btn btn-danger">
+                        <input type="submit" value="Remove Record" class="btn btn-danger">
                     </form>
                 </div>
             {% endif %}
         </article>
-        <div class="col-md-6">
-            <form action="/comments/{{alien.id}}" method="POST">
-                <fieldset>
-                    <legend>Add Comment</legend>
-                    <label class="form-label">Comment: </label>
-                    <input type="text" class="form-control" name="note" placeholder="enter comment here...">
-                </fieldset>
-                <input type="submit" class="btn btn-success" value="Add Comment">
-            </form>
-        </div>
+        <hr>
+        <h4>comments</h4>
+        <hr>
+        {% if loggedIn %}
+            <div class="col-md-6">
+                <form action="/comments/{{alien.id}}" method="POST">
+                    <fieldset>
+                        <legend><h5>Add Comment</h5></legend>
+                        <label class="form-label">comment: </label>
+                        <input class="form-control mb-1" type="text" name="note" placeholder="enter comment here..." required>
+                    </fieldset>
+                    <input type="submit" class="btn btn-success" value="Add Comment">
+                </form>
+            </div>
+        {% else %}
+            <div class="col-md-6">
+                <small>If you'd like to leave a comment, please log in...</small>
+            </div>
+        {% endif %}
+        <hr>
+        {% if alien.comments.length > 0%}
+            <div class="container-sm justify-content-center">
+                <div class="col-md-8 col-lg-6">
+                    {% for comment in alien.comments %}
+                        {% render '../comment.liquid', comment: comment, userId: userId, alien: alien %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <small>no comments yet...</small>
+        {% endif %}
     </div>
 {% endblock %}

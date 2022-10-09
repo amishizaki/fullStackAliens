@@ -1,45 +1,53 @@
 {% layout 'layout.liquid' %}
 {% block content %}
-<div class="container-sm">
-    <!-- here, we're using method override in order to send a PUT request -->
-    <form action="/aliens/{{ alien.id }}?_method=PUT" method="POST">
-        <fieldset>
-            <legend>Edit New Alien Species</legend>
-            <label class="form-label">Name:</label>
+
+    <div class="container-sm">
+        <!-- here, we're using method override in order to send a PUT request -->
+        {%- comment -%} change the action {%- endcomment -%}
+        {%- comment -%} add values to input fields {%- endcomment -%}
+        {%- comment -%} add a back button {%- endcomment -%}
+        <form action="/aliens/{{ alien.id }}?_method=PUT" method="POST">
+            <fieldset>
+                <legend>Edit {{ alien.species }}</legend>
+                <label class="form-label">Species: </label>
+                <input 
+                    class="form-control"
+                    type="text" 
+                    name="name" 
+                    placeholder="enter alien name"
+                    value="{{ alien.species }}"
+                >
+                <label class="form-label">Planet: </label>
+                <input 
+                    class="form-control"
+                    type="text" 
+                    name="planet" 
+                    placeholder="enter planet origin"
+                    value="{{ alien.planet }}"
+                >
+                <label class="form-label">Date Discovered:</label>
+                <input 
+                    class="form-control"
+                    type="number" 
+                    name="discovered" 
+                    placeholder="enter date of discovery"
+                    value="{{ alien.discovered }}"
+                >
+                <label class="form-label">Ready To Eat: </label>
+                <input 
+                    type="checkbox" 
+                    name="friendly"
+                    class="form-check-input"
+                    {% if alien.friendly %}
+                        checked
+                    {% endif %}
+                >
+            </fieldset>
             <input 
-                type="text" 
-                name="name" 
-                placeholder="enter alien name"
-                class="form-control"
-                value="{{ alien.name }}"
+                type="submit" 
+                class="btn btn-success" 
+                value="Edit {{ alien.name }}"
             >
-            <label class="form-label">Planet:</label>
-            <input 
-                type="text" 
-                name="planet" 
-                placeholder="enter planet origin"
-                class="form-control"
-                value="{{ alien.planet }}"
-            >
-            <label class="form-label">Date Discovered:</label>
-            <input 
-                type="text" 
-                name="discovered" 
-                placeholder="enter date of discovery"
-                class="form-control"
-                value="{{ alien.discovered }}"
-            >
-            <label class="form-label">Ready To Eat: </label>
-            <input 
-                type="checkbox" 
-                name="friendly"
-                class="form-check-input"
-                {% if alien.friendly %}
-                    checked
-                {% endif %}
-            >
-        </fieldset>
-        <input type="submit" class="btn btn-success" value="Edit {{ alien.name }}">
-    </form>
-</div>
+        </form>
+    </div>
 {% endblock %}
