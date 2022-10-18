@@ -2,7 +2,7 @@
 // Import Dependencies
 ///////////////////////////////////////
 const mongoose = require('./connection')
-const Fruit = require('./aliens')
+const Alien = require('./aliens')
 
 // Here, we're going to set up a seed script
 // this will seed our database for us, so we have some starting resources

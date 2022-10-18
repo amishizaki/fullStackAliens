@@ -29,7 +29,7 @@ const alienSchema = new Schema({
     comments: [commentSchema]
 }, { timestamps: true})
 
-// make the fruit model
+// make the alien model
 // the model method takes two args
 // the first is what we will call our model
 // the second is what we will use to build the model
