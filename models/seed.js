@@ -16,9 +16,9 @@ const db = mongoose.connection
 
 db.on('open', () => {
     const startAliens = [
-        { species: "Wookie", planet: "Kashyyyk", friendly: false, discovered: 1977 },
+        { species: "Wookies", planet: "Kashyyyk", friendly: false, discovered: 1977 },
         { species: "Vulcans", planet: "Vulcan", friendly: true, discovered: 1966 },
-        { species: "Klingon", planet: "Klingonii", friendly: false, discovered: 1967 },
+        { species: "Klingons", planet: "Klingonii", friendly: false, discovered: 1967 },
         { species: "Kryptonians", planet: "Krypton", friendly: true, discovered: 1933 },
         { species: "Gallifreyans", planet: "Gallifrey", friendly: true, discovered: 1963 }
     ]
