@@ -59,14 +59,14 @@ router.post("/", (req, res) => {
     console.log('the alien from the form', req.body)
     // we'll use the mongoose model method `create` to make a new alien
     Alien.create(req.body)
-        .then(fruit => {
+        .then(alien => {
             const username = req.session.username
             const loggedIn = req.session.loggedIn
             const userId = req.session.userId
-            // send the user a '201 created' response, along with the new fruit
-            // res.status(201).json({ fruit: fruit.toObject() })
-            res.redirect('/fruits')
-            // res.render('fruits/show', { fruit, username, loggedIn, userId })
+            // send the user a '201 created' response, along with the new alien
+            // res.status(201).json({ alien: alien.toObject() })
+            res.redirect('/aliens')
+            // res.render('aliens/show', { alien, username, loggedIn, userId })
         })
         .catch(err => res.redirect(`/error?error=${err}`))  
 })
@@ -96,48 +96,45 @@ router.get("/edit/:id", (req, res) => {
     const loggedIn = req.session.loggedIn
     const userId = req.session.userId
     // res.send('edit page')
+
+    const alienId = req.params.id
+
+    Alien.findById(alienId)
+        // render the edit form if there is a alien
+        .then(alien => {
+            res.render('aliens/edit', { alien, username, loggedIn, userId })
+        })
+        // redirect if there isn't
+        .catch(err => {
+            res.redirect(`/error?error=${err}`)
+        })
+    // res.send('edit page')
 })
 
 // PUT request
 // update route -> updates a specific alien
 router.put("/:id", (req, res) => {
-    // console.log("I hit the update route", req.params.id)
+    console.log("req.body initially", req.body)
     const id = req.params.id
+
+    req.body.friendly = req.body.friendly === 'on' ? true : false
+    console.log('req.body after changing checkbox value', req.body)
     Alien.findById(id)
         .then(alien => {
             if (alien.owner == req.session.userId) {
-                res.sendStatus(204)
+                // res.sendStatus(204)
                 return alien.updateOne(req.body)
             } else {
                 res.sendStatus(401)
             }
         })
-        .catch(error => res.json(error))
+        .then(() => {
+            // console.log('returned from update promise', data)
+            res.redirect(`/aliens/${id}`)
+        })
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
-// DELETE request
-// destroy route -> finds and deletes a single resource(alien)
-// here lies our old API delete route
-// router.delete("/:id", (req, res) => {
-//     // grab the id from the request
-//     const id = req.params.id
-//     // find and delete the alien
-//     // Alien.findByIdAndRemove(id)
-//     Alien.findById(id)
-//         .then(alien => {
-//             // we check for ownership against the logged in user's id
-//             if (alien.owner == req.session.userId) {
-//                 // if successful, send a status and delete the alien
-//                 res.sendStatus(204)
-//                 return alien.deleteOne()
-//             } else {
-//                 // if they are not the user, send the unauthorized status
-//                 res.sendStatus(401)
-//             }
-//         })
-//         // send the error if not
-//         .catch(err => res.json(err))
-// })
 router.delete('/:id', (req, res) => {
     // get the alien id
     const alienId = req.params.id
@@ -149,7 +146,7 @@ router.delete('/:id', (req, res) => {
             res.redirect('/aliens')
         })
         .catch(error => {
-            res.json({ error })
+            res.redirect(`/error?error=${err}`)
         })
 })
 
@@ -172,7 +169,7 @@ router.get("/:id", (req, res) => {
             // res.json({ alien: alien })
             res.render('aliens/show', { alien, username, loggedIn, userId })
         })
-        .catch(err => console.log(err))
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
 

@@ -1,9 +1,15 @@
 body {
-    background-color: slategray;
-
+    background-color: lightsteelblue;
 }
 
 .card {
+    background-image: url("space.jpg");
     margin: 5px;
-    width: 18rem;
+    color: antiquewhite;
+}
+
+.colorBox {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
 }

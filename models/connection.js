@@ -9,13 +9,16 @@ const mongoose = require("mongoose") // import mongoose
 /////////////////////////////////////////////
 // Setup inputs for our connect function
 const DATABASE_URL = process.env.DATABASE_URL
+const DEPLOYED_URL = process.env.DEPLOYED_URL
+
+
 const CONFIG = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 }
 
 // Establish Connection
-mongoose.connect(DATABASE_URL, CONFIG)
+mongoose.connect(DEPLOYED_URL, CONFIG)
 
 // Events for when connection opens/disconnects/errors
 mongoose.connection

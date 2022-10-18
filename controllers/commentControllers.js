@@ -2,7 +2,7 @@
 // Import Dependencies
 ////////////////////////////////////////
 const express = require("express")
-const Fruit = require("../models/aliens")
+const Alien = require("../models/aliens")
 
 /////////////////////////////////////////
 // Create Router
@@ -24,7 +24,7 @@ router.post("/:alienId", (req, res) => {
         res.sendStatus(401)
     }
     // find a specific alien
-    alien.findById(alienId)
+    Alien.findById(alienId)
         // do something if it works
         //  --> send a success response status and maybe the comment? maybe the alien?
         .then(alien => {
@@ -34,11 +34,11 @@ router.post("/:alienId", (req, res) => {
             return alien.save()
         })
         .then(alien => {
-            res.status(200).json({ alien: alien })
+            res.redirect(`/aliens/${alien.id}`)
         })
         // do something else if it doesn't work
         //  --> send some kind of error depending on what went wrong
-        .catch(error => console.log(error))
+        .catch(err => res.redirect(`/error?error=${err}`))
 })
 
 // DELETE
@@ -63,18 +63,20 @@ router.delete('/delete/:alienId/:commId', (req, res) => {
                     // here's another built in method
                     theComment.remove()
                     alien.save()
-                    res.sendStatus(204)
+                    res.redirect(`/aliens/${alien.id}`)
                     // return the saved alien
                     // return alien.save()
                 } else {
-                    res.sendStatus(401)
+                    const err = 'you%20are%20not%20authorized%20for%20this%20action'
+                    res.redirect(`/error?error=${err}`)
                 }
             } else {
-                res.sendStatus(401)
+                const err = 'you%20are%20not%20authorized%20for%20this%20action'
+                res.redirect(`/error?error=${err}`)
             }
         })
         // send an error if error
-        .catch(error => console.log(error))
+        .catch(err => res.redirect(`/error?error=${err}`))
 
 })
 

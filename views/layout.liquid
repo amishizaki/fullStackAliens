@@ -12,6 +12,28 @@
         <link rel="stylesheet" href="/styles.css" />
     </head>
     <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/aliens">Fictional AlienDB</a>
+                {% if loggedIn %}
+                    <a class="nav-link text-light" href="/aliens/mine">Hello {{username}}</a>
+                {% endif %}
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <a class="nav-link text-light" href="/aliens">all the aliens</a>
+                    {% if loggedIn %}
+                        <a class="nav-link text-light" href="/aliens/new">New Alien Species</a>
+                        <a class="nav-link text-light" href="/users/logout">Log Out</a>
+
+                    {% else %}
+                        <a class="nav-link text-light" href="/users/signup">Sign Up</a>
+                        <a class="nav-link text-light" href="/users/login">Log In</a>
+                    {% endif%}
+                </div>
+            </div>
+        </nav>
         <main class="container-md">
             {% block content %}
                 default content

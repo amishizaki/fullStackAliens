@@ -6,7 +6,7 @@ const morgan = require('morgan') // import morgan
 const express = require('express') // import express
 const session = require('express-session')
 const MongoStore = require('connect-mongo')
-
+ 
 /////////////////////////////////////////////
 // Middleware
 /////////////////////////////////////////////
@@ -22,7 +22,7 @@ app.use(
         // read about some of these later
         secret: process.env.SECRET,
         store: MongoStore.create({
-            mongoUrl: process.env.DATABASE_URL
+            mongoUrl: process.env.DEPLOYED_URL
         }),
         saveUninitialized: true,
         resave: false
